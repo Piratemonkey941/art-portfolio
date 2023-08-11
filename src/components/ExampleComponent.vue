@@ -1,64 +1,34 @@
+<script lang="ts">
+import { defineComponent, PropType, computed, ref, toRef, Ref } from 'vue';
+import { Todo, Meta } from './models';
+
+export default {
+  setup() {
+    return {
+      slide: ref(1),
+    };
+  },
+};
+</script>
+
 <template>
-  <div>
-    <p>{{ title }}</p>
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="increment">
-        {{ todo.id }} - {{ todo.content }}
-      </li>
-    </ul>
-    <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
-    <p>Active: {{ active ? 'yes' : 'no' }}</p>
-    <p>Clicks on todos: {{ clickCount }}</p>
+  <div class="text-test">
+    <q-carousel animated v-model="slide" arrows navigation infinite>
+      <q-carousel-slide
+        :name="1"
+        img-src="https://cdn.quasar.dev/img/mountains.jpg"
+      />
+      <q-carousel-slide
+        :name="2"
+        img-src="https://cdn.quasar.dev/img/parallax1.jpg"
+      />
+    </q-carousel>
   </div>
 </template>
 
-<script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  computed,
-  ref,
-  toRef,
-  Ref,
-} from 'vue';
-import { Todo, Meta } from './models';
-
-function useClickCount() {
-  const clickCount = ref(0);
-  function increment() {
-    clickCount.value += 1
-    return clickCount.value;
-  }
-
-  return { clickCount, increment };
+<style lang="scss" scoped>
+.text-test {
+  width: 90%;
+  height: 90%;
 }
-
-function useDisplayTodo(todos: Ref<Todo[]>) {
-  const todoCount = computed(() => todos.value.length);
-  return { todoCount };
-}
-
-export default defineComponent({
-  name: 'ExampleComponent',
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    todos: {
-      type: Array as PropType<Todo[]>,
-      default: () => []
-    },
-    meta: {
-      type: Object as PropType<Meta>,
-      required: true
-    },
-    active: {
-      type: Boolean
-    }
-  },
-  setup (props) {
-    return { ...useClickCount(), ...useDisplayTodo(toRef(props, 'todos')) };
-  },
-});
-</script>
+</style>
